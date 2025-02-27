@@ -8,4 +8,5 @@ import (
 
 func registerExtensions(repo repositories.Repository) {
 	extensions.Register(main_ext.NewMainExtension(repo))
+	//extensions.Register(dummy_ext.NewDummyExtension(repo))
 }

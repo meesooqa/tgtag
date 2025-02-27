@@ -37,6 +37,10 @@ func main() {
 	mux := http.NewServeMux()
 	menuData := buildMenuData(extensions.GetAllControllers())
 	tpl := web.NewDefaultTemplate(logger, menuData)
+	// handle common static
+	path, handler := tpl.StaticHandler()
+	mux.Handle(path, http.StripPrefix(path, handler))
+	// handle extensions
 	extensions.RegisterAllRoutes(logger, mux, tpl)
 
 	srv := &http.Server{

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"embed"
 	"log/slog"
 	"net/http"
 
@@ -8,7 +9,7 @@ import (
 )
 
 type Controller interface {
-	Router(log *slog.Logger, mux *http.ServeMux, tpl web.Template)
+	Router(log *slog.Logger, mux *http.ServeMux, tpl web.Template, fsContentTpl embed.FS)
 	GetChildren() []Controller
 	AddChildren(cc ...Controller)
 

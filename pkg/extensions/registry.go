@@ -18,7 +18,9 @@ func RegisterAllRoutes(log *slog.Logger, mux *http.ServeMux, tpl web.Template) {
 	for _, module := range modules {
 		module.RegisterRoutes(log, mux, tpl)
 		path, handler := module.StaticHandler()
-		mux.Handle(path, http.StripPrefix(path, handler))
+		if path != "" {
+			mux.Handle(path, http.StripPrefix(path, handler))
+		}
 	}
 }
 

@@ -10,8 +10,8 @@ import (
 
 // Extension describes extension features
 type Extension interface {
-	// ID returns ID of extension
-	ID() string
+	// GetName returns Name of extension
+	GetName() string
 
 	// GetControllers returns Controllers of extension
 	GetControllers() []controllers.Controller
@@ -20,5 +20,5 @@ type Extension interface {
 	RegisterRoutes(log *slog.Logger, mux *http.ServeMux, tpl web.Template)
 
 	// StaticHandler returns http.Handler, handler of extension's static files
-	StaticHandler() (path string, handler http.Handler)
+	StaticHandler() (string, http.Handler)
 }
