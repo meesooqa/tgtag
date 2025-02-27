@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"embed"
 	"encoding/json"
 	"html/template"
 	"io/fs"
@@ -13,27 +14,29 @@ import (
 )
 
 type BaseController struct {
-	Self       ControllerDataProvider
-	Log        *slog.Logger
-	MethodApi  string
-	RouteApi   string
-	Method     string
-	Route      string
-	Title      string
-	ContentTpl string
-	Tpl        web.Template
-	Children   []Controller
-	templates  *template.Template
+	Self         ControllerDataProvider
+	Log          *slog.Logger
+	MethodApi    string
+	RouteApi     string
+	Method       string
+	Route        string
+	Title        string
+	ContentTpl   string
+	Tpl          web.Template
+	Children     []Controller
+	templates    *template.Template
+	fsContentTpl embed.FS
 }
 
-func (c *BaseController) Router(log *slog.Logger, mux *http.ServeMux, tpl web.Template) {
+func (c *BaseController) Router(log *slog.Logger, mux *http.ServeMux, tpl web.Template, fsContentTpl embed.FS) {
 	c.Log = log
 	c.Tpl = tpl
+	c.fsContentTpl = fsContentTpl
 	c.initTemplates()
 	// the Children first
 	if len(c.GetChildren()) > 0 {
 		for _, cc := range c.GetChildren() {
-			cc.Router(log, mux, c.Tpl)
+			cc.Router(log, mux, c.Tpl, fsContentTpl)
 		}
 	}
 	// then the parent
@@ -91,12 +94,9 @@ func (c *BaseController) handlePage(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *BaseController) initTemplates() {
-	if c.ContentTpl == "" {
-		c.ContentTpl = c.Tpl.GetDefaultContentTpl()
-	}
 	tl := c.Tpl.GetTemplatesLocation()
 
-	var files []string
+	var files, fsFiles []string
 	// layout
 	topLevel, err := fs.Glob(os.DirFS(tl), "*.html")
 	if err != nil {
@@ -104,13 +104,19 @@ func (c *BaseController) initTemplates() {
 	}
 	files = append(files, topLevel...)
 	// content
-	subDir, err := fs.Glob(os.DirFS(tl), c.ContentTpl)
+	var subDir, fsSubDir []string
+	if c.ContentTpl == "" {
+		c.ContentTpl = c.Tpl.GetDefaultContentTpl()
+		subDir, err = fs.Glob(os.DirFS(tl), c.ContentTpl)
+	} else {
+		fsSubDir, err = fs.Glob(c.fsContentTpl, c.ContentTpl)
+		fsFiles = append(fsFiles, fsSubDir...)
+	}
 	if err != nil {
 		c.Log.Error("finding tpls - subDir", slog.Any("err", err))
 		log.Fatal(err)
 	}
 	files = append(files, subDir...)
-
 	for i, f := range files {
 		files[i] = tl + "/" + f
 	}
@@ -118,5 +124,13 @@ func (c *BaseController) initTemplates() {
 	c.templates, err = template.ParseFiles(files...)
 	if err != nil {
 		c.Log.Error("parsing tpls", slog.Any("err", err))
+	}
+	if len(fsFiles) != 0 {
+		for _, fsFile := range fsFiles {
+			_, err = c.templates.ParseFS(c.fsContentTpl, fsFile)
+			if err != nil {
+				c.Log.Error("parsing FS tpls", slog.Any("fsFile", fsFile), slog.Any("err", err))
+			}
+		}
 	}
 }

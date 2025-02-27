@@ -14,13 +14,12 @@ type MainController struct {
 
 func NewMainController(repo repositories.Repository) *MainController {
 	c := &MainController{controllers.BaseController{
-		MethodApi: http.MethodGet,
-		RouteApi:  "/api/main",
-		Method:    http.MethodGet,
-		Route:     "/",
-		Title:     "Main Extension Page",
-		// ContentTpl: "github.com/meesooqa/tgtag/ext/main_ext/content/home.html",
-		ContentTpl: "content/home.html",
+		MethodApi:  http.MethodGet,
+		RouteApi:   "/api/main",
+		Method:     http.MethodGet,
+		Route:      "/",
+		Title:      "Main Extension Page",
+		ContentTpl: "template/content/home.html",
 		Children: []controllers.Controller{
 			NewGroupController(repo),
 		},

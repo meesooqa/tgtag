@@ -12,6 +12,7 @@ type Template interface {
 	GetLayoutTpl() string
 	GetDefaultContentTpl() string
 	GetData(r *http.Request, contentData map[string]any) (map[string]any, error)
+	StaticHandler() (string, http.Handler)
 }
 
 type DefaultTemplate struct {
@@ -33,6 +34,10 @@ func NewDefaultTemplate(log *slog.Logger, menuData []MenuItem) *DefaultTemplate 
 		log:      log,
 		menuData: menuData,
 	}
+}
+
+func (t *DefaultTemplate) StaticHandler() (string, http.Handler) {
+	return "/static/", http.FileServer(http.Dir(t.GetStaticLocation()))
 }
 
 func (t *DefaultTemplate) GetTemplatesLocation() string {

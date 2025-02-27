@@ -1,21 +1,25 @@
 package extensions
 
 import (
+	"embed"
+	"fmt"
+	"io/fs"
 	"log/slog"
 	"net/http"
-
-	"github.com/google/uuid"
 
 	"github.com/meesooqa/tgtag/internal/web"
 	"github.com/meesooqa/tgtag/pkg/controllers"
 )
 
 type BaseExtension struct {
-	Controllers []controllers.Controller
+	Name         string
+	Controllers  []controllers.Controller
+	FsStaticDir  embed.FS
+	FsContentTpl embed.FS
 }
 
-func (e *BaseExtension) ID() string {
-	return uuid.New().String()
+func (e *BaseExtension) GetName() string {
+	return e.Name
 }
 
 func (e *BaseExtension) GetControllers() []controllers.Controller {
@@ -27,11 +31,14 @@ func (e *BaseExtension) RegisterRoutes(log *slog.Logger, mux *http.ServeMux, tpl
 		return
 	}
 	for _, controller := range e.Controllers {
-		controller.Router(log, mux, tpl)
+		controller.Router(log, mux, tpl, e.FsContentTpl)
 	}
 }
 
-func (e *BaseExtension) StaticHandler() (path string, handler http.Handler) {
-	// TODO return "/static/", http.FileServer(http.Dir("./templates/default/static"))
-	return "/static/", http.FileServer(http.Dir("./templates/default/static"))
+func (e *BaseExtension) StaticHandler() (string, http.Handler) {
+	if _, err := fs.ReadDir(e.FsStaticDir, "static"); err != nil {
+		return "", http.NotFoundHandler()
+	}
+	path := fmt.Sprintf("/static/%s/", e.GetName())
+	return path, http.StripPrefix(path, http.FileServer(http.FS(e.FsStaticDir)))
 }
