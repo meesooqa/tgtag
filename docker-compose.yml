@@ -1,0 +1,17 @@
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongodb_tgtag
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - tgtag_mongo_data:/data/db
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+volumes:
+  tgtag_mongo_data:

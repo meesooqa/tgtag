@@ -1,0 +1,6 @@
+mongo:
+  uri: "mongodb://localhost:27017"
+  database: "tgtag"
+  collection_messages: "messages"
+system:
+  data_path: "var/data"
