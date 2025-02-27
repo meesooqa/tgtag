@@ -1,0 +1,68 @@
+/* Page */
+
+.page,
+.page__body {
+    height: 100%;
+}
+
+.page {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: var(--clr-txt-primary);
+    background-color: var(--clr-bg-primary);
+    scroll-behavior: smooth;
+}
+
+.page__body {
+    max-width: 1920px;
+    margin: 0 auto;
+
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    display: grid;
+    grid-template-columns: 256px 1fr;
+    grid-gap: 1rem;
+}
+
+.page__body a {
+    text-underline-offset: 2px;
+    text-decoration-thickness: .5px;
+}
+.page__body a:hover {
+    background-color: var(--clr-link-hover-bg);
+}
+.page__body a:hover,
+.page__body a:focus {
+    text-decoration-thickness: 1px;
+}
+
+.page__body a:link {
+    color: var(--clr-link-primary);
+    text-decoration-color: var(--clr-link-primary-underline);
+}
+.page__body a:hover:link,
+.page__body a:focus:link {
+    text-decoration-color: var(--clr-link-primary);
+}
+
+.page__body a:visited {
+    color: var(--clr-link-visited);
+    text-decoration-color: var(--clr-link-visited-underline);
+}
+.page__body a:hover:visited,
+.page__body a:focus:visited {
+    text-decoration-color: var(--clr-link-visited);
+}
+
+.page__body a:active {
+    color: var(--clr-link-active);
+    text-decoration-color: var(--clr-link-active);
+}
+.page__body a:hover:active,
+.page__body a:focus:active {
+    text-decoration-color: var(--clr-link-active);
+}
+
+.page__body a:focus {
+    outline: 2px solid var(--clr-link-primary);
+}

@@ -19,6 +19,9 @@ func TestLoad(t *testing.T) {
 
 	assert.IsType(t, &SystemConfig{}, c.System)
 	assert.Equal(t, "test/data", c.System.DataPath)
+
+	assert.IsType(t, &ServerConfig{}, c.Server)
+	assert.Equal(t, 12345, c.Server.Port)
 }
 
 func TestLoadConfigNotFoundFile(t *testing.T) {

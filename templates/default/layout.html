@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html class="page" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/styles/styles.css">
+    <title>{{.Title}}</title>
+</head>
+<body class="page__body">
+{{template "_aside.html" .}}
+<main class="main">
+    <header class="main__header">
+        {{if eq .Group ""}}
+        <h1 class="main__title" title="{{ .Title }}"><label for="group">{{.Title}}</label></h1>
+        <h2 class="main__subtitle">&nbsp;</h2>
+        {{else}}
+        <h1 class="main__title" title="{{.Group}}"><label for="group">{{.Group}}</label></h1>
+        {{if ne .Title ""}}
+        <h2 class="main__subtitle" title="{{.Title}}">{{.Title}}</h2>
+        {{end}}
+        {{end}}
+    </header>
+    <section class="main__content" id="content">
+        {{block "content" .}}
+        <p>Default content</p>
+        {{end}}
+    </section>
+</main>
+</body>
+<script type="module" src="/static/scripts/index.js"></script>
+</html>

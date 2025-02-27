@@ -1,0 +1,36 @@
+<aside class="sidebar">
+    <div class="sidebar__group" title="{{.Group}}">
+        <select name="group" id="group"></select>
+    </div>
+    <nav class="sidebar__nav">
+        {{if .Menu}}
+        <ul>
+            {{range .Menu}}
+            <li>
+                {{if .IsActive}}
+                <span title="{{.Title}}">{{.Title}}</span>
+                {{else}}
+                <a href="{{.Link}}" title="{{.Title}}">{{.Title}}</a>
+                {{end}}
+                {{if .Children}}
+                <ul>
+                    {{range .Children}}
+                    <li>
+                        {{if .IsActive}}
+                        <span title="{{.Title}}">{{.Title}}</span>
+                        {{else}}
+                        <a href="{{.Link}}" title="{{.Title}}">{{.Title}}</a>
+                        {{end}}
+                    </li>
+                    {{end}}
+                </ul>
+                {{end}}
+            </li>
+            {{end}}
+        </ul>
+        {{end}}
+    </nav>
+    <footer class="sidebar__footer">
+        <div class="copyright"><a href="https://github.com/meesooqa">meesooqa</a></div>
+    </footer>
+</aside>

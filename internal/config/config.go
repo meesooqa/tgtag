@@ -10,18 +10,24 @@ import (
 type Conf struct {
 	Mongo  *MongoConfig  `yaml:"mongo"`
 	System *SystemConfig `yaml:"system"`
+	Server *ServerConfig `yaml:"server"`
 }
 
-// MongoDB parameters
+// MongoConfig is a set of parameters for MongoDB
 type MongoConfig struct {
 	URI                string `yaml:"uri"`
 	Database           string `yaml:"database"`
 	CollectionMessages string `yaml:"collection_messages"`
 }
 
-// System parameters
+// SystemConfig is the configuration for App
 type SystemConfig struct {
 	DataPath string `yaml:"data_path"`
+}
+
+// ServerConfig is a configuration for the server
+type ServerConfig struct {
+	Port int `yaml:"port"`
 }
 
 // Load config from file

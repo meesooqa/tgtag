@@ -1,0 +1,23 @@
+@charset "utf-8";
+
+/* Blocks */
+
+@import "blocks/box-sizing.css";
+@import "blocks/page.css";
+@import "blocks/sidebar.css";
+@import "blocks/main.css";
+
+:root {
+    --clr-txt-primary: #000000;
+    --clr-bg-primary: #ffffff;
+
+    --clr-brdr: lightgray;
+
+    --clr-link-hover-bg: whitesmoke;
+    --clr-link-primary: rgb(0, 0, 255);
+    --clr-link-primary-underline: rgba(0, 0, 255, .5);
+    --clr-link-visited: rgb(85, 26, 139);
+    --clr-link-visited-underline: rgba(85, 26, 139, .5);
+    --clr-link-active: rgb(255, 0, 0);
+    --clr-link-active-underline: rgba(255, 0, 0, .5);
+}

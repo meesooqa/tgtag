@@ -1,0 +1,25 @@
+/* Main */
+
+.main {
+    display: grid;
+    grid-template-rows: 6rem 1fr;
+}
+
+.main__header {
+    overflow-x: auto;
+    white-space: nowrap;
+    width: 100%;
+    display: grid;
+}
+
+.main__title {
+    margin: 0;
+    font-size: 2rem;
+    align-self: center;
+}
+
+.main__subtitle {
+    margin: 0;
+    font-size: 1.5rem;
+    align-self: center;
+}

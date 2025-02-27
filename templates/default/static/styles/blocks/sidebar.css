@@ -1,0 +1,38 @@
+/* Sidebar */
+
+.sidebar {
+    display: grid;
+    grid-template-rows: 2rem 1fr 2rem;
+    grid-gap: 1rem;
+    padding-top: .5rem;
+    padding-bottom: 1rem;
+}
+
+.sidebar__group select {
+    height: 100%;
+    width: 100%;
+}
+
+.sidebar__nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar__nav ul ul a,
+.sidebar__nav ul ul span {
+    padding-left: 2rem;
+}
+
+.sidebar__nav a,
+.sidebar__nav span {
+    display: block;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.sidebar__footer {
+    padding-top: 1rem;
+    border-top: 1px solid var(--clr-brdr);
+}

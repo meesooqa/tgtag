@@ -4,3 +4,5 @@ mongo:
   collection_messages: "messages"
 system:
   data_path: "var/data"
+server:
+  port: 8080

@@ -70,45 +70,16 @@ func (r *MessageRepository) Find(ctx context.Context, filter bson.M, opts ...*op
 	return items, nil
 }
 
-func (r *MessageRepository) GetUniqueValues(ctx context.Context, fieldName string) ([]string, error) {
+func (r *MessageRepository) GetGroups(ctx context.Context) ([]string, error) {
+	return r.getUniqueValues(ctx, "group")
+}
+
+func (r *MessageRepository) getUniqueValues(ctx context.Context, fieldName string) ([]string, error) {
 	values, err := r.collection.Distinct(ctx, fieldName, bson.D{})
 	if err != nil {
 		return nil, fmt.Errorf("distinct failed: %w", err)
 	}
 	return convertToStrings(values), nil
-}
-
-func (r *MessageRepository) GetTags(ctx context.Context, query string) ([]string, error) {
-	var results []string
-	cursor, err := r.collection.Aggregate(ctx,
-		mongo.Pipeline{
-			bson.D{{"$unwind", "$tags"}},
-			bson.D{{"$group", bson.D{{"_id", "$tags"}}}},
-			bson.D{{"$match", bson.D{{"_id", bson.D{{"$regex", query}, {"$options", "i"}}}}}},
-		})
-	if err != nil {
-		return nil, err
-	}
-	defer func() {
-		if err := cursor.Close(ctx); err != nil {
-			r.log.Error("cursor close error", "err", err)
-		}
-	}()
-
-	type res struct {
-		ID string `bson:"_id"`
-	}
-	for cursor.Next(ctx) {
-		var elem res
-		if err := cursor.Decode(&elem); err != nil {
-			return nil, fmt.Errorf("decode error: %w", err)
-		}
-		if elem.ID != "" {
-			results = append(results, elem.ID)
-		}
-	}
-
-	return results, nil
 }
 
 func convertToStrings(values []interface{}) []string {

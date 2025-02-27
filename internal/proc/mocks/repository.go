@@ -20,14 +20,10 @@ func (f *RepositoryMock) UpsertMany(messagesChan <-chan models.Message) {
 	}
 }
 
-func (f *RepositoryMock) GetUniqueValues(ctx context.Context, fieldName string) ([]string, error) {
+func (f *RepositoryMock) GetGroups(ctx context.Context) ([]string, error) {
 	return nil, nil
 }
 
 func (f *RepositoryMock) Find(ctx context.Context, filter bson.M, opts ...*options.FindOptions) ([]*models.Message, error) {
-	return nil, nil
-}
-
-func (f *RepositoryMock) GetTags(ctx context.Context, query string) ([]string, error) {
 	return nil, nil
 }
