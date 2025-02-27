@@ -36,9 +36,14 @@ func (e *BaseExtension) RegisterRoutes(log *slog.Logger, mux *http.ServeMux, tpl
 }
 
 func (e *BaseExtension) StaticHandler() (string, http.Handler) {
-	if _, err := fs.ReadDir(e.FsStaticDir, "static"); err != nil {
+	// TODO errors
+	if _, err := fs.Stat(e.FsStaticDir, "template/static"); err != nil {
 		return "", http.NotFoundHandler()
 	}
+	staticFS, err := fs.Sub(e.FsStaticDir, "template/static")
+	if err != nil {
+		return "", nil
+	}
 	path := fmt.Sprintf("/static/%s/", e.GetName())
-	return path, http.StripPrefix(path, http.FileServer(http.FS(e.FsStaticDir)))
+	return path, http.FileServer(http.FS(staticFS))
 }
